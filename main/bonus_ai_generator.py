@@ -5,15 +5,7 @@ class AITweetGenerator:
     def __init__(self, model_name="distilgpt2"):
         try:
             self.tokenizer = GPT2Tokenizer.from_pretrained(model_name)
-            self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-            
-            self.model = GPT2LMHeadModel.from_pretrained(
-                model_name, 
-                torch_dtype=torch.float16,
-                device_map="auto" if torch.cuda.is_available() else None,
-                low_cpu_mem_usage=True
-            ).to(self.device)
-            
+            self.model = GPT2LMHeadModel.from_pretrained(model_name)
             self.tokenizer.pad_token = self.tokenizer.eos_token
             print(f"Loaded {model_name} successfully!")
         except Exception as e:
