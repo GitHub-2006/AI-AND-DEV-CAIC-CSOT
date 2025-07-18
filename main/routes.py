@@ -8,8 +8,8 @@ import joblib
 from main import app, bonus_ai_generator, tweet_generator
 from datetime import datetime
 
-df = pd.read_csv(r"C:\Users\devra\Downloads\IITD CSE LEARNING\CAIC SUMMER OF TECH\AI + DEV\WEEK 4\main\user_stats.csv")
-values = pd.read_csv(r"C:\Users\devra\Downloads\IITD CSE LEARNING\CAIC SUMMER OF TECH\AI + DEV\WEEK 4\main\inferred_company_encoded_values.csv")
+df = pd.read_csv("main/user_stats.csv")
+values = pd.read_csv("main/inferred_company_encoded_values.csv")
 values = np.array(values)
 values_company = values[:, 0]
 values_encoded = values[:, 1]
@@ -75,7 +75,7 @@ def predict_page():
             'Release_Time_Year': Release__time_year,
             'Sentiment': sentiment
         }
-        file = r'C:\Users\devra\Downloads\IITD CSE LEARNING\CAIC SUMMER OF TECH\AI + DEV\WEEK 4\main\like_predictor.pkl'
+        file = "main/like_predictor.pkl"
         model = joblib.load(file)
         features_df = pd.DataFrame([features])
         prediction = model.predict(features_df)
@@ -152,7 +152,7 @@ def tweet_and_predict_page():
             'Release_Time_Year': Release__time_year,
             'Sentiment': sentiment_simple
         }
-        file = r'C:\Users\devra\Downloads\IITD CSE LEARNING\CAIC SUMMER OF TECH\AI + DEV\WEEK 4\main\like_predictor.pkl'
+        file = "main/like_predictor.pkl"
         model = joblib.load(file)
 
         features_df_simple = pd.DataFrame([features_simple])
