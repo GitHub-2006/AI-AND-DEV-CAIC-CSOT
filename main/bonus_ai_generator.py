@@ -2,7 +2,7 @@ from transformers import GPT2LMHeadModel, GPT2Tokenizer
 import torch
 
 class AITweetGenerator:
-    def __init__(self, model_name="gpt2-medium"):
+    def __init__(self, model_name="distilgpt2"):
         try:
             self.tokenizer = GPT2Tokenizer.from_pretrained(model_name)
             self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
