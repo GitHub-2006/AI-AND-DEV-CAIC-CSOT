@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+    <style>
+        body {
+            margin: 0;
+        }
+
+        @font-face {
+            font-family: 'Algerian';
+            src: local('Algerian'), url('https://fonts.cdnfonts.com/s/17444/Algerian.woff') format('woff');
+            font-weight: bold;
+        }
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100vw;
+            background-color: black !important;
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 70px;
+        }
+
+        .navbar span {
+            font-family: 'Algerian', serif, cursive, sans-serif;
+            color: #fff685;
+            font-size: 5rem;
+            font-weight: bold;
+            letter-spacing: 2px;
+            text-align: center;
+            width: 100%;
+            display: block;
+            transition: background 0.3s, color 0.3s;
+        }
+    </style>
+</head>
+
+<body
+    style="background-color: #51e2f5; color: #101357; font-family: 'Times New Roman', Times, serif, cursive, sans-serif;">
+    <nav class="navbar">
+        <span>SOCIAL MEDIA HANDLER</span>
+    </nav>
+    <div class="content" style="margin-top: 80px; padding: 20px; text-align: center; font-size: 1.8rem;">
+        <h1>Welcome to the Social Media Handler</h1>
+        <p>Use this tool to predict the engagement on your posts!</p>
+        <p>Whether you want to predict likes on your tweets,
+            generate new tweets, or both, we've got you covered!</p>
+        <p>To use the predict likes feature, we will need your username,
+            company inferred, day and time of posting, content
+            and any media files that may be relevant.</p>
+        <p>To generate a tweet, we will need the topic you want to tweet about,
+            company inferred, type of tweet, and the content.</p>
+        <p>Choose an option below to get started:</p>
+        <div style="display: flex; justify-content: center; gap: 20px; margin-top: 20px;">
+            <a href="{{ url_for('predict_page') }}">
+                <button type="button" class="btn btn-primary" style="padding: 10px 20px; font-size: 1.5rem; background-color: #8458B3; color: #fff; border: none;
+                    border-radius: 5px; cursor: pointer;">
+                    Predict Likes
+                </button>
+            </a>
+            <a href="{{ url_for('tweet_page') }}">
+                <button type="button" class="btn btn-primary" style="padding: 10px 20px; font-size: 1.5rem; background-color: #8458B3; color: #fff; border: none;
+                    border-radius: 5px; cursor: pointer;">
+                    Generate Tweet
+                </button>
+            </a>
+            <a href="{{ url_for('tweet_and_predict_page') }}">
+                <button type="button" class="btn btn-primary" style="padding: 10px 20px; font-size: 1.5rem; background-color: #8458B3; color: #fff; border: none;
+                    border-radius: 5px; cursor: pointer;">
+                    Generate and Predict
+                </button>
+            </a>
+        </div>
+    </div>
+</body>
+
+</html>
