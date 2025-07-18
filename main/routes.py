@@ -8,11 +8,6 @@ import joblib
 from main import app, bonus_ai_generator, tweet_generator
 from datetime import datetime
 
-df = pd.read_csv("main/user_stats.csv")
-values = pd.read_csv("main/inferred_company_encoded_values.csv")
-values = np.array(values)
-values_company = values[:, 0]
-values_encoded = values[:, 1]
 AITweetGenerator = bonus_ai_generator.AITweetGenerator()
 SimpleTweetGenerator = tweet_generator.SimpleTweetGenerator()
 
@@ -45,6 +40,11 @@ def home_page():
 @app.route('/predict', methods=['GET', 'POST'])
 def predict_page():
     form = PredictionForm()
+    df = pd.read_csv("main/user_stats.csv")
+    values = pd.read_csv("main/inferred_company_encoded_values.csv")
+    values = np.array(values)
+    values_company = values[:, 0]
+    values_encoded = values[:, 1]
     if form.validate_on_submit():
         username = form.username.data
         post_content = form.content.data
@@ -102,6 +102,11 @@ def tweet_page():
 @app.route('/tweet_and_predict', methods=['GET', 'POST'])
 def tweet_and_predict_page():
     form = TweetForm2()
+    df = pd.read_csv("main/user_stats.csv")
+    values = pd.read_csv("main/inferred_company_encoded_values.csv")
+    values = np.array(values)
+    values_company = values[:, 0]
+    values_encoded = values[:, 1]
     if form.validate_on_submit():
         username = form.username.data
         company = form.company.data
