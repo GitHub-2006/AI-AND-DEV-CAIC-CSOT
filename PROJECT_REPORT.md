@@ -2,13 +2,12 @@
 
 ## Overview
 
-This project, developed as part of the CAIC Summer of Technology 2025 - ML+Dev track, is a full-stack AI application designed to generate tweets and predict their engagement (likes). It demonstrates the integration of machine learning models with a web interface, allowing users to interact with AI-powered tweet generation and engagement prediction in real-time.
+This project, developed as part of the CAIC Summer of Technology 2025 - ML+Dev track, is a full-stack AI application designed to generate tweets and predict their engagement (likes). It demonstrates the integration of machine learning models with a web interface, allowing users to interact with a simple tweet generation and engagement prediction in real-time. AI-generator has been omitted due to heavy consumption of space, leading to more memory needed than the 512MB limit set on render. 
 
 ## 🌟 Key Features
 
 * **Tweet Generation:**
     * **Simple Generator:** Creates tweets based on predefined templates using company name, tweet type, message, and topic.
-    * **AI Generator (GPT-2):** Leverages a pre-trained GPT-2 model to generate more dynamic and contextually relevant tweets.
 * **Like Prediction:**
     * Utilises a pre-trained machine learning model (`like_predictor.pkl`) to estimate the number of likes a generated tweet might receive.
     * Features used for Prediction include tweet content length, word count, sentiment polarity, and user-specific historical data.
@@ -21,7 +20,6 @@ This project, developed as part of the CAIC Summer of Technology 2025 - ML+Dev t
 
 * **Backend:** Python, Flask
 * **Machine Learning:** scikit-learn, joblib, pandas, TextBlob
-* **AI Generation:** HuggingFace Transformers (GPT-2)
 * **Frontend:** HTML, CSS (via Flask templates)
 * **Deployment:** Render (Flask app)
 * **Version Control:** Git, GitHub
@@ -31,7 +29,7 @@ This project, developed as part of the CAIC Summer of Technology 2025 - ML+Dev t
 The application follows a precise flow:
 
 1.  **User Input:** The user provides details such as company name, tweet type, message, and topic through the web interface.
-2.  **Tweet Generation:** Based on whether the AI model is available, the application either uses the `SimpleTweetGenerator` or the `AITweetGenerator` to craft a tweet.
+2.  **Tweet Generation:** The application either uses the `SimpleTweetGenerator` to craft a tweet.
 3.  **Feature Extraction:** The generated tweet's characteristics (e.g., word count, character count, sentiment polarity) are extracted. Additional user-specific data (like `Average_Likes_Post`, `User_Post_Count` from `user_stats.csv`) and company encoding (`inferred_company_encoded_values.csv`) are retrieved.
 4.  **Like Prediction:** These extracted features are fed into the pre-trained `like_predictor.pkl` machine learning model.
 5.  **Results Display:** The generated tweet and its predicted number of likes are displayed to the user on the web page.
@@ -39,12 +37,16 @@ The application follows a precise flow:
 ## 📂 Project Structure
 
 WEEK 5/
+├── main/
+    ├──templates
+    ├──__init__.py
+    ├──routes.py
+    ├──like_predictor.pkl
+    ....
 
 ├── PROJECT_REPORT.md
 
 ├── app.py
-
-├── bonus_ai_generator.py
 
 ├── like_predictor.pkl
 
