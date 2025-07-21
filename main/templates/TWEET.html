@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Tweet Generation Page</title>
+    <style>
+        body {
+            margin: 0;
+            background-color: #51e2f5;
+            color: #101357;
+            font-family: 'Times New Roman', Times, serif, cursive, sans-serif;
+        }
+
+        @font-face {
+            font-family: 'Algerian';
+            src: local('Algerian'), url('https://fonts.cdnfonts.com/s/17444/Algerian.woff') format('woff');
+            font-weight: bold;
+        }
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100vw;
+            background-color: black !important;
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 70px;
+        }
+
+        .navbar span {
+            font-family: 'Algerian', serif, cursive, sans-serif;
+            color: #fff685;
+            font-size: 5rem;
+            font-weight: bold;
+            letter-spacing: 2px;
+            text-align: center;
+            width: 100%;
+            display: block;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        .content {
+            max-width: 900px;
+            margin: 50px auto 0;
+            padding: 40px;
+            text-align: center;
+            font-size: 1.8rem;
+            background-color: rgba(255, 255, 255, 0.7);
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .form-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 25px;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            flex: 1 1 40%;
+            min-width: 220px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .form-group.full-width {
+            flex: 1 1 100%;
+        }
+
+        label {
+            font-size: 1.6rem;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 10px;
+            font-size: 1.1rem;
+            border: 1px solid #8458B3;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            background: #f7f7fa;
+        }
+
+        .btn-primary,
+        .btn {
+            padding: 15px 40px;
+            font-size: 1.8rem;
+            background-color: #8458B3;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            margin-top: 30px;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary:hover,
+        .btn:hover {
+            background-color: #6d3f9d;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .result-container {
+            margin-top: 40px;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+            padding: 30px;
+        }
+
+        .result-section {
+            margin-bottom: 25px;
+        }
+
+        .result-title {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #8458B3;
+            margin-bottom: 10px;
+        }
+
+                .info-section {
+            margin-top: 40px;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 12px;
+            border: 2px dashed #8458B3;
+        }
+
+        .info-section h3 {
+            font-size: 2.2rem;
+            color: #101357;
+            margin-top: 0;
+            border-bottom: 2px solid #8458B3;
+            padding-bottom: 10px;
+            display: inline-block;
+        }
+
+        .info-section ul {
+            text-align: left;
+            padding-left: 30px;
+            font-size: 1.6rem;
+            margin-top: 20px;
+        }
+
+        .info-section li {
+            margin-bottom: 15px;
+        }
+
+        .tweet-content {
+            font-size: 1.2rem;
+            color: #101357;
+            background: #f7f7fa;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 10px;
+        }
+
+        .result-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .back-btn {
+            background: #fff685;
+            color: #101357;
+            border: 2px solid #8458B3;
+            font-size: 1.2rem;
+            margin-top: 30px;
+            padding: 10px 25px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        .back-btn:hover {
+            background: #8458B3;
+            color: #fff685;
+        }
+
+        .btn-same-height {
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <span>SOCIAL MEDIA HANDLER</span>
+    </nav>
+    <div class="content">
+        <h1 style="font-size: 3rem; margin-bottom: 30px;">Engaging Tweet Generator</h1>
+        <p style="font-size: 1.9rem; margin-bottom: 30px;">Enter your tweet details to generate engaging content</p>
+        <form method="POST">
+            {{ form.hidden_tag() }}
+            <div class="form-container">
+                <div class="form-group">
+                    {{ form.company.label }}
+                    {{ form.company(placeholder="What company is this for?") }}
+                </div>
+                <div class="form-group">
+                    {{ form.tweet_type.label }}
+                    {{ form.tweet_type(placeholder="Announcement, Question, General") }}
+                </div>
+                <div class="form-group full-width">
+                    {{ form.topic.label }}
+                    {{ form.topic(placeholder="Enter the main topic") }}
+                </div>
+                <div class="form-group full-width">
+                    {{ form.message.label }}
+                    {{ form.message(placeholder="Enter your message content") }}
+                </div>
+            </div>
+            {{ form.submit(class="btn-primary") }}
+        </form>
+        {% if ai_generated_tweet or simple_generated_tweet %}
+        <div class="result-container">
+            {% if ai_generated_tweet %}
+            <div class="result-section">
+                <div class="result-title">AI Generated Tweet:</div>
+                <div class="tweet-content">{{ ai_generated_tweet }}</div>
+            </div>
+            {% endif %}
+            {% if simple_generated_tweet %}
+            <div class="result-section">
+                <div class="result-title">Simple Generated Tweet:</div>
+                <div class="tweet-content">{{ simple_generated_tweet }}</div>
+            </div>
+            {% endif %}
+            <div class="result-buttons">
+                <button class="btn btn-same-height" onclick="window.location.reload();">Generate Another</button>
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="info-section">
+            <h3>How to Use This Tool</h3>
+            <ul>
+                <li>Enter the company name for which you want to generate a tweet.</li>
+                <li>Select the type of tweet you want to create (e.g., Announcement, Question, General).</li>
+                <li>Provide the main topic and message content for your tweet.</li>
+                <li>Click "Generate" to create engaging tweets based on your input.</li>
+                <li>There will be two tweets generated: one using AI and another using a simpler method.</li>
+                <li>You can choose whichever one you prefer.</li>
+            </ul>
+        </div>
+
+        <a href="{{ url_for('home_page') }}" class="back-btn btn-same-height">Back to Home</a>
+    </div>
+</body>
+
+</html>
