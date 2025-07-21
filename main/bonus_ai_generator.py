@@ -1,55 +1,54 @@
-from transformers import GPT2LMHeadModel, GPT2Tokenizer
 import torch
-
+from transformers import GPT2LMHeadModel, GPT2Tokenizer
+import logging
+logging.basicConfig(level=logging.INFO)
 class AITweetGenerator:
-    def __init__(self, model_name="gpt2-medium"):
+    def __init__(self, model_name="gpt2"):
+        self.model = None
+        self.tokenizer = None
+        self.device = torch.device("cpu")
         try:
+            logging.info(f"Loading tokenizer for model: {model_name}")
             self.tokenizer = GPT2Tokenizer.from_pretrained(model_name)
-            self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-            
-            self.model = GPT2LMHeadModel.from_pretrained(
-                model_name, 
-                torch_dtype=torch.float16,
-                device_map="auto" if torch.cuda.is_available() else None,
+            self.tokenizer.pad_token = self.tokenizer.eos_token
+            logging.info(f"Loading model: {model_name}")
+            model = GPT2LMHeadModel.from_pretrained(
+                model_name,
                 low_cpu_mem_usage=True
             ).to(self.device)
-            
-            self.tokenizer.pad_token = self.tokenizer.eos_token
-            print(f"Loaded {model_name} successfully!")
+            logging.info("Applying int8 dynamic quantization to the model...")
+            self.model = torch.quantization.quantize_dynamic(
+                model, {torch.nn.Linear}, dtype=torch.qint8
+            )
+            logging.info(f"Successfully loaded and quantized model '{model_name}'!")
         except Exception as e:
-            print(f"Model loading failed: {e}")
-            self.model = None
-
+            logging.error(f"Model initialization failed: {e}", exc_info=True)
     def generate_tweet(self, company, tweet_type, message, topic):
         if not self.model:
-            return "AI model not available. Using simple generator as fallback."
-            
+            return "AI model is not available due to an error."
         try:
-            prompt = f"Create a {tweet_type} tweet for {company} about {topic}: {message}"
-            
+            prompt = f"Create a {tweet_type} tweet for the company {company} about {topic}: {message}"
             inputs = self.tokenizer(
                 prompt,
                 return_tensors="pt",
-                max_length=50,
+                max_length=100,
                 truncation=True
             ).to(self.device)
-            
             with torch.no_grad():
                 outputs = self.model.generate(
                     **inputs,
-                    max_new_tokens=50,
-                    temperature=0.8,
-                    top_p=0.9,
+                    max_new_tokens=60,
+                    temperature=0.7,
+                    top_k=50,
                     do_sample=True,
-                    pad_token_id=self.tokenizer.eos_token_id,
-                    num_return_sequences=1
+                    pad_token_id=self.tokenizer.eos_token_id
                 )
-            
             generated_text = self.tokenizer.decode(
                 outputs[0],
                 skip_special_tokens=True
             )
-            return generated_text[len(prompt):].strip()[:280]
+            response = generated_text[len(prompt):].strip()
+            return response if response else "Generated an empty response, please try again."
         except Exception as e:
-            return(f"Generation error: {e}")
-            print(f"Error generating tweet: {e}")
+            logging.error(f"Error during tweet generation: {e}", exc_info=True)
+            return "An error occurred while generating the AI tweet."

@@ -10,6 +10,13 @@ from datetime import datetime
 
 AITweetGenerator = bonus_ai_generator.AITweetGenerator()
 SimpleTweetGenerator = tweet_generator.SimpleTweetGenerator()
+df = pd.read_csv("main/user_stats.csv")
+values = pd.read_csv("main/inferred_company_encoded_values.csv")
+values = np.array(values)
+values_company = values[:, 0]
+values_encoded = values[:, 1]
+file = "main/like_predictor.pkl"
+model = joblib.load(file)
 
 class PredictionForm(FlaskForm):
     username = StringField('Username')
@@ -40,11 +47,6 @@ def home_page():
 @app.route('/predict', methods=['GET', 'POST'])
 def predict_page():
     form = PredictionForm()
-    df = pd.read_csv("main/user_stats.csv")
-    values = pd.read_csv("main/inferred_company_encoded_values.csv")
-    values = np.array(values)
-    values_company = values[:, 0]
-    values_encoded = values[:, 1]
     if form.validate_on_submit():
         username = form.username.data
         post_content = form.content.data
@@ -75,8 +77,6 @@ def predict_page():
             'Release_Time_Year': Release__time_year,
             'Sentiment': sentiment
         }
-        file = "main/like_predictor.pkl"
-        model = joblib.load(file)
         features_df = pd.DataFrame([features])
         prediction = model.predict(features_df)
         prediction = int(np.exp(prediction)[0])
@@ -102,11 +102,6 @@ def tweet_page():
 @app.route('/tweet_and_predict', methods=['GET', 'POST'])
 def tweet_and_predict_page():
     form = TweetForm2()
-    df = pd.read_csv("main/user_stats.csv")
-    values = pd.read_csv("main/inferred_company_encoded_values.csv")
-    values = np.array(values)
-    values_company = values[:, 0]
-    values_encoded = values[:, 1]
     if form.validate_on_submit():
         username = form.username.data
         company = form.company.data
@@ -157,8 +152,6 @@ def tweet_and_predict_page():
             'Release_Time_Year': Release__time_year,
             'Sentiment': sentiment_simple
         }
-        file = "main/like_predictor.pkl"
-        model = joblib.load(file)
 
         features_df_simple = pd.DataFrame([features_simple])
         prediction_simple = model.predict(features_df_simple)
