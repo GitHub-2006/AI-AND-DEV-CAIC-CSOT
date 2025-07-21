@@ -79,7 +79,7 @@ To set up and run the Tweet Intelligence Engine on your local machine, follow th
 
 The application is deployed online and can be accessed at:
 
-**https://socialengagement.com**
+**https://socialengagement.onrender.com**
 
 ## ✅ Deliverables Achieved
 
