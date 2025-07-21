@@ -250,16 +250,8 @@
             </div>
             {{ form.submit(class="btn-primary") }}
         </form>
-        {% if ai_generated_tweet or simple_generated_tweet %}
+        {% if simple_generated_tweet %}
         <div class="result-container">
-            {% if ai_generated_tweet %}
-            <div class="result-section">
-                <div class="result-title">AI Generated Tweet:</div>
-                <div class="tweet-content">{{ ai_generated_tweet }}</div>
-                <div class="like-count">Predicted Likes: {{ prediction_ai }}</div>
-            </div>
-            {% endif %}
-            {% if simple_generated_tweet %}
             <div class="result-section">
                 <div class="result-title">Simple Generated Tweet:</div>
                 <div class="tweet-content">{{ simple_generated_tweet }}</div>

@@ -5,10 +5,9 @@ from textblob import TextBlob
 import pandas as pd
 import numpy as np
 import joblib
-from main import app, bonus_ai_generator, tweet_generator
+from main import app, tweet_generator
 from datetime import datetime
 
-AITweetGenerator = bonus_ai_generator.AITweetGenerator()
 SimpleTweetGenerator = tweet_generator.SimpleTweetGenerator()
 df = pd.read_csv("main/user_stats.csv")
 values = pd.read_csv("main/inferred_company_encoded_values.csv")
@@ -65,7 +64,6 @@ def predict_page():
         else:
             Average_Likes_Post = 0
             User_Post_Count = 0
-        
         features = {
             'Average_Likes_Post': Average_Likes_Post,
             'User_Post_Count': User_Post_Count,
@@ -80,7 +78,6 @@ def predict_page():
         features_df = pd.DataFrame([features])
         prediction = model.predict(features_df)
         prediction = int(np.exp(prediction)[0])
-
         return render_template('predict.html', form=form, prediction=prediction)
     return render_template('predict.html', form=form)
 
@@ -92,11 +89,8 @@ def tweet_page():
         tweet_type = form.tweet_type.data
         message = form.message.data
         topic = form.topic.data
-        
-        ai_generated_tweet = AITweetGenerator.generate_tweet(company, tweet_type, message, topic)
         simple_generated_tweet = SimpleTweetGenerator.generate_tweet(company, tweet_type, message, topic)
-
-        return render_template('tweet.html', form=form, ai_generated_tweet=ai_generated_tweet, simple_generated_tweet=simple_generated_tweet)
+        return render_template('tweet.html', form=form, simple_generated_tweet=simple_generated_tweet)
     return render_template('tweet.html', form=form)
 
 @app.route('/tweet_and_predict', methods=['GET', 'POST'])
@@ -108,10 +102,7 @@ def tweet_and_predict_page():
         tweet_type = form.tweet_type.data
         message = form.message.data
         topic = form.topic.data
-        
-        ai_generated_tweet = AITweetGenerator.generate_tweet(company, tweet_type, message, topic)
         simple_generated_tweet = SimpleTweetGenerator.generate_tweet(company, tweet_type, message, topic)
-        
         inferred_company_encoded = int(values_encoded[list(values_company).index(company)]) if company in values_company else -1
         if username in df['Username'].values:
             Average_Likes_Post = float(df[df['Username'] == username]['Average_Likes_Post'].values[0])
@@ -120,27 +111,11 @@ def tweet_and_predict_page():
             Average_Likes_Post = 0
             User_Post_Count = 0
         has_mention_simple = int('@' in simple_generated_tweet or '#' in simple_generated_tweet)
-        has_mention_ai = int('@' in ai_generated_tweet or '#' in ai_generated_tweet)
         word_count_simple = len(simple_generated_tweet.split())
-        word_count_ai = len(ai_generated_tweet.split())
         content_length_simple = len(simple_generated_tweet)
-        content_length_ai = len(ai_generated_tweet)
         sentiment_simple = TextBlob(simple_generated_tweet).sentiment.polarity
-        sentiment_ai = TextBlob(ai_generated_tweet).sentiment.polarity
         Is_weekend = int(datetime.now().weekday() >= 5)
         Release__time_year = datetime.now().year
-        
-        features_ai = {
-            'Average_Likes_Post': Average_Likes_Post,
-            'User_Post_Count': User_Post_Count,
-            'Word_Count': word_count_ai,
-            'Inferred_Company_Encoded': inferred_company_encoded,
-            'Content_Length': content_length_ai,
-            'Has_Mention': has_mention_ai,
-            'Is_Weekend': Is_weekend,
-            'Release_Time_Year': Release__time_year,
-            'Sentiment': sentiment_ai
-        }
         features_simple = {
             'Average_Likes_Post': Average_Likes_Post,
             'User_Post_Count': User_Post_Count,
@@ -152,18 +127,10 @@ def tweet_and_predict_page():
             'Release_Time_Year': Release__time_year,
             'Sentiment': sentiment_simple
         }
-
         features_df_simple = pd.DataFrame([features_simple])
         prediction_simple = model.predict(features_df_simple)
         prediction_simple = int(np.exp(prediction_simple)[0])
-
-        features_df_ai = pd.DataFrame([features_ai])
-        prediction_ai = model.predict(features_df_ai)
-        prediction_ai = int(np.exp(prediction_ai)[0])
-                        
         return render_template('tweet_and_predict.html', form=form,
-                               ai_generated_tweet=ai_generated_tweet,
                                simple_generated_tweet=simple_generated_tweet,
-                               prediction_simple=prediction_simple,
-                               prediction_ai=prediction_ai)
+                               prediction_simple=prediction_simple)
     return render_template('tweet_and_predict.html', form=form)

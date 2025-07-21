@@ -234,20 +234,12 @@
             </div>
             {{ form.submit(class="btn-primary") }}
         </form>
-        {% if ai_generated_tweet or simple_generated_tweet %}
+        {% if simple_generated_tweet %}
         <div class="result-container">
-            {% if ai_generated_tweet %}
-            <div class="result-section">
-                <div class="result-title">AI Generated Tweet:</div>
-                <div class="tweet-content">{{ ai_generated_tweet }}</div>
-            </div>
-            {% endif %}
-            {% if simple_generated_tweet %}
             <div class="result-section">
                 <div class="result-title">Simple Generated Tweet:</div>
                 <div class="tweet-content">{{ simple_generated_tweet }}</div>
             </div>
-            {% endif %}
             <div class="result-buttons">
                 <button class="btn btn-same-height" onclick="window.location.reload();">Generate Another</button>
             </div>
@@ -261,7 +253,6 @@
                 <li>Select the type of tweet you want to create (e.g., Announcement, Question, General).</li>
                 <li>Provide the main topic and message content for your tweet.</li>
                 <li>Click "Generate" to create engaging tweets based on your input.</li>
-                <li>There will be two tweets generated: one using AI and another using a simpler method.</li>
                 <li>You can choose whichever one you prefer.</li>
             </ul>
         </div>
